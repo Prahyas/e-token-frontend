@@ -2,14 +2,9 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { DataContext } from '../../ContextAPI/data';
 
-const DashboardCard = ({ id, name, totaltokens, singletoken }) => {
+const DashboardCard = ({ id, name, totaltokens, singletoken, deviceinfos }) => {
   const { apiData } = useContext(DataContext);
   const [api, setapi] = apiData;
-  const { fetchTokensFunction } = useContext(DataContext);
-  const { fetchTokens } = fetchTokensFunction;
-  const [newCurrentTokenData, setnewCurrentTokenData] = useState(
-    singletoken + 1
-  );
 
   const updateCurrentToken = async (
     updatedCurrentTokenId,
@@ -32,8 +27,8 @@ const DashboardCard = ({ id, name, totaltokens, singletoken }) => {
   };
 
   useEffect(() => {
-    console.log('newCurrentTokenData', newCurrentTokenData);
-  }, [newCurrentTokenData]);
+    console.log('deviceinfos', deviceinfos);
+  }, [deviceinfos]);
 
   return (
     <>

@@ -4,7 +4,7 @@ import axios from 'axios';
 export const DataContext = createContext();
 
 export const DataProvider = (props) => {
-  const [api, setapi] = useState('http://localhost:1337');
+  const [api, setapi] = useState('https://e-token-backend.herokuapp.com');
   const [departments, setDepartments] = useState([]);
   const [services, setServices] = useState([]);
   const [tokens, setTokens] = useState([]);
@@ -54,9 +54,7 @@ export const DataProvider = (props) => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get(
-        `${api}/api/services?populate[0]=tokens`
-      );
+      const response = await axios.get(`${api}/api/services?populate=*`);
 
       setServices(response.data.data);
     } catch (error) {
