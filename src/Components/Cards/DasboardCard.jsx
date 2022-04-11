@@ -2,15 +2,31 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { DataContext } from '../../ContextAPI/data';
 
-const DashboardCard = ({ id, name, totaltokens, singletoken, deviceinfos }) => {
+const DashboardCard = ({
+  serviceId,
+  tokenId,
+  name,
+  totaltokens,
+  singletoken,
+}) => {
   const { apiData } = useContext(DataContext);
   const [api, setapi] = apiData;
+  const { fetchServicesFunction } = useContext(DataContext);
+  const { fetchServices } = fetchServicesFunction;
+  const { deviceinfosData } = useContext(DataContext);
+  const [deviceinfos, setDeviceinfos] = deviceinfosData;
+
+  useEffect(() => {
+    console.log('singletoken', singletoken);
+    console.log('totaltoken', totaltokens);
+    console.log('serviceId', serviceId);
+  }, [deviceinfos, serviceId]);
 
   const updateCurrentToken = async (
     updatedCurrentTokenId,
     editedCurrentTokenData
   ) => {
-    console.log('id, data', updatedCurrentTokenId, editedCurrentTokenData);
+    // console.log('id, data', updatedCurrentTokenId, editedCurrentTokenData);
     try {
       const response = await axios.put(
         `${api}/api/tokens/${updatedCurrentTokenId}`,
@@ -20,15 +36,45 @@ const DashboardCard = ({ id, name, totaltokens, singletoken, deviceinfos }) => {
           },
         }
       );
-      window.location.reload();
+      fetchServices();
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    console.log('deviceinfos', deviceinfos);
-  }, [deviceinfos]);
+  const sendNotificationToDevice = async (newsingletoken) => {
+    try {
+      const deviceDetails = deviceinfos.filter((a) => {
+        return (
+          serviceId === a.attributes.service.data.id &&
+          newsingletoken === a.attributes.usertoken
+        );
+      });
+      await axios.post(
+        'https://fcm.googleapis.com/fcm/send',
+        {
+          to: `${deviceDetails[0].attributes.fcmtoken}`,
+          priority: 'high',
+          content_available: true,
+          notification: {
+            body: 'hajurko paalo aaouna laaagyo haii ',
+            title: ' 5 min paxi aaouxa?',
+            sound: 'default',
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'key=AAAAVigk7U0:APA91bEUGSX0JHTkglKudNs7PSCmSFajOD_tlMDbVIanixWXYGc0xq-v1pGQNNcJzU1g33aXZphqO4PtrzymchtPfqEmsCmiSzmuQ10-AQ090VEuDW-o-t053EU3quMY1YaSNYNhfN8V',
+          },
+        }
+      );
+      console.log('devicedetails', deviceDetails[0].attributes.fcmtoken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -51,10 +97,13 @@ const DashboardCard = ({ id, name, totaltokens, singletoken, deviceinfos }) => {
         </div>
         <button
           type='button'
-          onClick={() => updateCurrentToken(id, singletoken + 1)}
+          onClick={() => {
+            updateCurrentToken(tokenId, singletoken + 1);
+            sendNotificationToDevice(singletoken + 1);
+          }}
           className='disabled:opacity-75 disabled:cursor-not-allowed mt-5 py-2 px-3 text-xs font-medium text-center text-white bg-crimson rounded-lg w-full'
           disabled={
-            singletoken === totaltokens ||
+            singletoken >= totaltokens ||
             totaltokens === 'Not set' ||
             singletoken === 'Not set'
           }

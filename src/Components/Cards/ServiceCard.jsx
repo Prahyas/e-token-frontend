@@ -10,10 +10,10 @@ const ServiceCard = ({ id, attributes, deleteServices, updateServices }) => {
 
   return (
     <>
-      <div className='w-full my-2 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700'>
-        <div className='p-5'>
-          <div className='flex justify-between'>
-            <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
+      <div className='block mr-3 my-3 grow bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700'>
+        <div className='p-4'>
+          <div className='flex justify-between items-center'>
+            <h5 className='mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
               {attributes.name}
             </h5>
             <div className='flex space-x-2'>
@@ -23,7 +23,7 @@ const ServiceCard = ({ id, attributes, deleteServices, updateServices }) => {
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
-                  className='h-5 w-5'
+                  className='h-4 w-4'
                   viewBox='0 0 20 20'
                   fill='currentColor'
                 >
@@ -41,7 +41,7 @@ const ServiceCard = ({ id, attributes, deleteServices, updateServices }) => {
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
+                  className='h-4 w-4'
                   fill='none'
                   viewBox='0 0 24 24'
                   stroke='currentColor'

@@ -111,8 +111,9 @@ const Dashboard = () => {
             ) : (
               <DashboardCard
                 key={service.id}
+                serviceId={service.id}
                 name={service.attributes.name}
-                id={service.attributes.tokens.data[0].id}
+                tokenId={service.attributes.tokens.data[0].id}
                 totaltokens={
                   service.attributes.tokens.data.slice(-1)[0].attributes
                     .totaltokens
@@ -123,7 +124,6 @@ const Dashboard = () => {
                   service.attributes.tokens.data.slice(-1)[0].attributes
                     .singletoken
                 }
-                deviceinfos={service.attributes.deviceinfos}
               />
             )
           )}

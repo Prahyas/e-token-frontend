@@ -8,6 +8,7 @@ export const DataProvider = (props) => {
   const [departments, setDepartments] = useState([]);
   const [services, setServices] = useState([]);
   const [tokens, setTokens] = useState([]);
+  const [deviceinfos, setDeviceinfos] = useState([]);
 
   useEffect(() => {
     const getLocal = () => {
@@ -45,7 +46,6 @@ export const DataProvider = (props) => {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(`${api}/api/departments?populate=*`);
-
       setDepartments(response.data.data);
     } catch (error) {
       console.error(error.message);
@@ -55,7 +55,6 @@ export const DataProvider = (props) => {
   const fetchServices = async () => {
     try {
       const response = await axios.get(`${api}/api/services?populate=*`);
-
       setServices(response.data.data);
     } catch (error) {
       console.error(error.message);
@@ -65,8 +64,15 @@ export const DataProvider = (props) => {
   const fetchTokens = async () => {
     try {
       const response = await axios.get(`${api}/api/tokens?populate[0]=service`);
-
       setTokens(response.data.data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  const fetchDeviceInfos = async () => {
+    try {
+      const response = await axios.get(`${api}/api/deviceinfos?populate=*`);
+      setDeviceinfos(response.data.data);
     } catch (error) {
       console.error(error.message);
     }
@@ -76,6 +82,7 @@ export const DataProvider = (props) => {
     fetchDepartments();
     fetchServices();
     fetchTokens();
+    fetchDeviceInfos();
   }, []);
 
   return (
@@ -88,6 +95,7 @@ export const DataProvider = (props) => {
         fetchServicesFunction: { fetchServices },
         tokensData: [tokens, setTokens],
         fetchTokensFunction: { fetchTokens },
+        deviceinfosData: [deviceinfos, setDeviceinfos],
       }}
     >
       {props.children}
